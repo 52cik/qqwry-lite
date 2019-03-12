@@ -1,0 +1,28 @@
+{
+  "name": "qqwry-lite",
+  "version": "0.1.0",
+  "description": "qqwry.dat for node (node 纯真 IP 库)",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ip",
+    "qqwry",
+    "qqwry.dat"
+  ],
+  "author": "楼教主 <fe.52cik@gmail.com> (http://www.52cik.com/)",
+  "license": "MIT",
+  "dependencies": {
+    "gbk.js": "^0.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^11.11.1",
+    "qqwry-lite-data": "^2019.3.10",
+    "rollup": "^1.6.0",
+    "rollup-plugin-typescript2": "0.19.0",
+    "typescript": "^3.3.3333"
+  }
+}
