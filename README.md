@@ -25,7 +25,7 @@ $ yarn add qqwry-lite-data # 纯真 IP 库
 const { QQwry } = require('qqwry-lite');
 const db = new QQwry();
 
-console.log(db.searchIP('223.5.5.5')); // { ip: '223.5.5.5', country: '浙江省杭州市', area: '阿里巴巴阿里云AliDNS服务器' }
+console.log(db.searchIP('223.5.5.5')); // { ip: '223.5.5.5', addr: '浙江省杭州市', info: '阿里巴巴阿里云AliDNS服务器' }
 ```
 
 不安装 `qqwry-lite-data` 自己下载 `qqwry.dat` 数据。
@@ -35,7 +35,7 @@ const fs = require('fs');
 const { QQwry } = require('qqwry-lite');
 const db = new QQwry(fs.join(__dirname, 'qqwry.dat')); // 自定义数据库
 
-console.log(db.searchIP('223.5.5.5')); // { ip: '223.5.5.5', country: '浙江省杭州市', area: '阿里巴巴阿里云AliDNS服务器' }
+console.log(db.searchIP('223.5.5.5')); // { ip: '223.5.5.5', addr: '浙江省杭州市', info: '阿里巴巴阿里云AliDNS服务器' }
 ```
 
 ## API
