@@ -1,11 +1,12 @@
-interface IPInfo {
+export interface IPInfo {
   /** IP地址 */
   ip: string;
-  /** 地址信息: 省市/局域网/网络类型 */
-  country: string;
-  /** 描述信息: 运营商/公司/组织/描述信息 */
-  area: string;
+  /** 地址信息: 国家/省市/局域网 */
+  addr: string;
+  /** 描述信息: 运营商/公司/组织/节点 */
+  info: string;
 }
+
 export declare class QQwry {
   /**
    * qqwry.dat 地址
