@@ -1,5 +1,6 @@
 .nyc_output
 .vscode
+.rpt2_cache
 coverage
 node_modules
 docs
@@ -17,3 +18,4 @@ yarn.lock
 CNAME
 
 qqwry.dat
+tmp.js
