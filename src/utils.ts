@@ -1,5 +1,5 @@
 import { decode as GBK_decode } from 'gbk.js';
-import QQwry from './index';
+import { QQwry } from './index';
 
 const IP_RECORD_LENGTH = 7; // IP 记录数据长度
 const REDIRECT_MODE_1 = 1;
@@ -96,7 +96,7 @@ function ReadArea(offset: number, buffer: Buffer) {
 export function setIPLocation(offset: number, buffer: Buffer) {
   let ipwz = buffer.readUIntLE(offset + 4, 3) + 4;
   let lx = buffer.readUIntLE(ipwz, 1);
-  let loc: { country: string; area: string } = { country: '', area: '' };
+  let loc: { addr: string; info: string } = { addr: '', info: '' };
   let Gjbut: number[] = [];
 
   if (lx === REDIRECT_MODE_1) {
@@ -107,29 +107,34 @@ export function setIPLocation(offset: number, buffer: Buffer) {
     if (lx == REDIRECT_MODE_2) {
       //再次检查标识字节
       Gjbut = getStringByteArray(buffer.readUIntLE(ipwz + 1, 3), buffer);
-      loc.country = GBK_decode(Gjbut);
-      // loc.country = Gjbut.toString();
+      loc.addr = GBK_decode(Gjbut);
+      // loc.addr = Gjbut.toString();
       ipwz = ipwz + 4;
     } else {
       Gjbut = getStringByteArray(ipwz, buffer);
-      loc.country = GBK_decode(Gjbut);
-      // loc.country = Gjbut.toString();
+      loc.addr = GBK_decode(Gjbut);
+      // loc.addr = Gjbut.toString();
       ipwz += Gjbut.length + 1;
     }
-    loc.area = ReadArea(ipwz, buffer);
+    loc.info = ReadArea(ipwz, buffer);
   } else if (lx === REDIRECT_MODE_2) {
     //Country直接读取偏移处字符串
     Gjbut = getStringByteArray(buffer.readUIntLE(ipwz + 1, 3), buffer);
-    loc.country = GBK_decode(Gjbut);
-    // loc.country = Gjbut.toString();
-    loc.area = ReadArea(ipwz + 4, buffer);
+    loc.addr = GBK_decode(Gjbut);
+    // loc.addr = Gjbut.toString();
+    loc.info = ReadArea(ipwz + 4, buffer);
   } else {
     // Country 直接读取 Area 根据标志再判断
     Gjbut = getStringByteArray(ipwz, buffer);
     ipwz += Gjbut.length + 1;
-    loc.country = GBK_decode(Gjbut);
-    // loc.country = Gjbut.toString();
-    loc.area = ReadArea(ipwz, buffer);
+    loc.addr = GBK_decode(Gjbut);
+    // loc.addr = Gjbut.toString();
+    loc.info = ReadArea(ipwz, buffer);
+  }
+
+  // 过滤信息
+  if (loc.info.indexOf('CZ88.NET') > -1) {
+    loc.info = '';
   }
 
   return loc;

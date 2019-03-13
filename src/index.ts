@@ -1,13 +1,13 @@
 import { readFileSync } from 'fs';
 import { ip2int, locateIP, setIPLocation } from './utils';
 
-interface IPInfo {
+export interface IPInfo {
   /** IP地址 */
   ip: string;
-  /** 地址信息: 省市/局域网/网络类型 */
-  country: string;
-  /** 描述信息: 运营商/公司/组织/描述信息 */
-  area: string;
+  /** 地址信息: 国家/省市/局域网 */
+  addr: string;
+  /** 描述信息: 运营商/公司/组织/节点 */
+  info: string;
 }
 
 export class QQwry {
@@ -35,11 +35,11 @@ export class QQwry {
     const offset = locateIP(ipInt, this); // 寻找 ip 偏移
 
     if (offset === -1) {
-      return { ip, country: '', area: '' };
+      return { ip, addr: '', info: '' };
     }
 
-    const { country, area } = setIPLocation(offset, this.buffer);
-    return { ip, country, area };
+    const { addr, info } = setIPLocation(offset, this.buffer);
+    return { ip, addr, info };
   }
 }
 
