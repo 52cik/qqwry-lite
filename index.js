@@ -2,21 +2,19 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var fs = _interopDefault(require('fs'));
+var fs = require('fs');
 var gbk_js = require('gbk.js');
 
-const IP_RECORD_LENGTH = 7; // IP 记录数据长度
-const REDIRECT_MODE_1 = 1;
-const REDIRECT_MODE_2 = 2;
+var IP_RECORD_LENGTH = 7; // IP 记录数据长度
+var REDIRECT_MODE_1 = 1;
+var REDIRECT_MODE_2 = 2;
 /**
  * IP转正数
  * @param ip
  */
 function ip2int(ip) {
-    const bytes = ip.split('.').map(n => parseInt(n, 10));
-    let addr = bytes[3] & 0xff;
+    var bytes = ip.split('.').map(function (n) { return parseInt(n, 10); });
+    var addr = bytes[3] & 0xff;
     addr |= (bytes[2] << 8) & 0xff00;
     addr |= (bytes[1] << 16) & 0xff0000;
     addr |= (bytes[0] << 24) & 0xff000000;
@@ -29,7 +27,7 @@ function ip2int(ip) {
  * @param recordLength 记录长度
  */
 function getMiddleOffset(begin, end, recordLength) {
-    const records = (((end - begin) / recordLength) >> 1) * recordLength + begin;
+    var records = (((end - begin) / recordLength) >> 1) * recordLength + begin;
     return records ^ begin ? records : records + recordLength;
 }
 /**
@@ -38,10 +36,10 @@ function getMiddleOffset(begin, end, recordLength) {
  * @param qqwry QQwry 实例
  */
 function locateIP(ip, qqwry) {
-    let temp;
-    let g = -1;
-    let b = qqwry.ipBegin;
-    let e = qqwry.ipEnd;
+    var temp;
+    var g = -1;
+    var b = qqwry.ipBegin;
+    var e = qqwry.ipEnd;
     for (; b < e;) {
         g = getMiddleOffset(b, e, IP_RECORD_LENGTH); //获取中间位置
         temp = qqwry.buffer.readUIntLE(g, 4);
@@ -62,11 +60,12 @@ function locateIP(ip, qqwry) {
     return g;
 }
 // 读取 buffer 字符串 (GBK数据)
-function getStringByteArray(start = 0, buffer) {
-    const maxSize = buffer.length;
-    const toarr = [];
-    for (let i = start; i < maxSize; i++) {
-        const s = buffer[i];
+function getStringByteArray(start, buffer) {
+    if (start === void 0) { start = 0; }
+    var maxSize = buffer.length;
+    var toarr = [];
+    for (var i = start; i < maxSize; i++) {
+        var s = buffer[i];
         if (s === 0) {
             return toarr;
         }
@@ -96,10 +95,10 @@ function ReadArea(offset, buffer) {
  * @param buffer 数据库
  */
 function setIPLocation(offset, buffer) {
-    let ipwz = buffer.readUIntLE(offset + 4, 3) + 4;
-    let lx = buffer.readUIntLE(ipwz, 1);
-    let loc = { country: '', area: '' };
-    let Gjbut = [];
+    var ipwz = buffer.readUIntLE(offset + 4, 3) + 4;
+    var lx = buffer.readUIntLE(ipwz, 1);
+    var loc = { country: '', area: '' };
+    var Gjbut = [];
     if (lx === REDIRECT_MODE_1) {
         //Country根据标识再判断
         ipwz = buffer.readUIntLE(ipwz + 1, 3); //读取国家偏移`
@@ -137,12 +136,12 @@ function setIPLocation(offset, buffer) {
     return loc;
 }
 
-class QQwry {
+var QQwry = /** @class */ (function () {
     /**
      * qqwry.dat 地址
      * @param path 路径
      */
-    constructor(path) {
+    function QQwry(path) {
         path = path || require('qqwry-lite-data');
         this.buffer = fs.readFileSync(path); // 读取数据库
         this.ipBegin = this.buffer.readUIntLE(0, 4); // 0-4 字节存储 数据库 起始位置
@@ -152,16 +151,17 @@ class QQwry {
      * 搜索IP信息
      * @param ip IP
      */
-    searchIP(ip) {
-        const ipInt = ip2int(ip);
-        const offset = locateIP(ipInt, this); // 寻找 ip 偏移
+    QQwry.prototype.searchIP = function (ip) {
+        var ipInt = ip2int(ip);
+        var offset = locateIP(ipInt, this); // 寻找 ip 偏移
         if (offset === -1) {
-            return { ip, country: '', area: '' };
+            return { ip: ip, country: '', area: '' };
         }
-        const { country, area } = setIPLocation(offset, this.buffer);
-        return { ip, country, area };
-    }
-}
+        var _a = setIPLocation(offset, this.buffer), country = _a.country, area = _a.area;
+        return { ip: ip, country: country, area: area };
+    };
+    return QQwry;
+}());
 
 exports.QQwry = QQwry;
 exports.default = QQwry;
