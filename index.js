@@ -97,7 +97,7 @@ function ReadArea(offset, buffer) {
 function setIPLocation(offset, buffer) {
     var ipwz = buffer.readUIntLE(offset + 4, 3) + 4;
     var lx = buffer.readUIntLE(ipwz, 1);
-    var loc = { country: '', area: '' };
+    var loc = { addr: '', info: '' };
     var Gjbut = [];
     if (lx === REDIRECT_MODE_1) {
         //Country根据标识再判断
@@ -106,32 +106,36 @@ function setIPLocation(offset, buffer) {
         if (lx == REDIRECT_MODE_2) {
             //再次检查标识字节
             Gjbut = getStringByteArray(buffer.readUIntLE(ipwz + 1, 3), buffer);
-            loc.country = gbk_js.decode(Gjbut);
-            // loc.country = Gjbut.toString();
+            loc.addr = gbk_js.decode(Gjbut);
+            // loc.addr = Gjbut.toString();
             ipwz = ipwz + 4;
         }
         else {
             Gjbut = getStringByteArray(ipwz, buffer);
-            loc.country = gbk_js.decode(Gjbut);
-            // loc.country = Gjbut.toString();
+            loc.addr = gbk_js.decode(Gjbut);
+            // loc.addr = Gjbut.toString();
             ipwz += Gjbut.length + 1;
         }
-        loc.area = ReadArea(ipwz, buffer);
+        loc.info = ReadArea(ipwz, buffer);
     }
     else if (lx === REDIRECT_MODE_2) {
         //Country直接读取偏移处字符串
         Gjbut = getStringByteArray(buffer.readUIntLE(ipwz + 1, 3), buffer);
-        loc.country = gbk_js.decode(Gjbut);
-        // loc.country = Gjbut.toString();
-        loc.area = ReadArea(ipwz + 4, buffer);
+        loc.addr = gbk_js.decode(Gjbut);
+        // loc.addr = Gjbut.toString();
+        loc.info = ReadArea(ipwz + 4, buffer);
     }
     else {
         // Country 直接读取 Area 根据标志再判断
         Gjbut = getStringByteArray(ipwz, buffer);
         ipwz += Gjbut.length + 1;
-        loc.country = gbk_js.decode(Gjbut);
-        // loc.country = Gjbut.toString();
-        loc.area = ReadArea(ipwz, buffer);
+        loc.addr = gbk_js.decode(Gjbut);
+        // loc.addr = Gjbut.toString();
+        loc.info = ReadArea(ipwz, buffer);
+    }
+    // 过滤信息
+    if (loc.info.indexOf('CZ88.NET') > -1) {
+        loc.info = '';
     }
     return loc;
 }
@@ -155,10 +159,10 @@ var QQwry = /** @class */ (function () {
         var ipInt = ip2int(ip);
         var offset = locateIP(ipInt, this); // 寻找 ip 偏移
         if (offset === -1) {
-            return { ip: ip, country: '', area: '' };
+            return { ip: ip, addr: '', info: '' };
         }
-        var _a = setIPLocation(offset, this.buffer), country = _a.country, area = _a.area;
-        return { ip: ip, country: country, area: area };
+        var _a = setIPLocation(offset, this.buffer), addr = _a.addr, info = _a.info;
+        return { ip: ip, addr: addr, info: info };
     };
     return QQwry;
 }());
