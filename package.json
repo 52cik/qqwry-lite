@@ -1,6 +1,6 @@
 {
   "name": "qqwry-lite",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "qqwry.dat for node (node 纯真 IP 库)",
   "main": "index.js",
   "types": "index.d.ts",
