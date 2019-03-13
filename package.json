@@ -1,12 +1,16 @@
 {
   "name": "qqwry-lite",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "qqwry.dat for node (node 纯真 IP 库)",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/52cik/qqwry-lite.git"
   },
   "keywords": [
     "ip",
@@ -15,6 +19,10 @@
   ],
   "author": "楼教主 <fe.52cik@gmail.com> (http://www.52cik.com/)",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/52cik/qqwry-lite/issues"
+  },
+  "homepage": "https://github.com/52cik/qqwry-lite#readme",
   "dependencies": {
     "gbk.js": "^0.2.4"
   },
