@@ -1,6 +1,6 @@
 {
   "name": "qqwry-lite",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "qqwry.dat for node (node 纯真 IP 库)",
   "main": "index.js",
   "types": "index.d.ts",
@@ -8,6 +8,10 @@
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/52cik/qqwry-lite.git"
@@ -24,13 +28,13 @@
   },
   "homepage": "https://github.com/52cik/qqwry-lite#readme",
   "dependencies": {
-    "gbk.js": "^0.2.4"
+    "gbk.js": "^0.3.0"
   },
   "devDependencies": {
-    "@types/node": "^11.11.1",
-    "qqwry-lite-data": "^2019.3.10",
-    "rollup": "^1.6.0",
-    "rollup-plugin-typescript2": "0.19.0",
-    "typescript": "^3.3.3333"
+    "@types/node": "^12.7.4",
+    "qqwry-lite-data": "^2019.7.20",
+    "rollup": "^1.21.0",
+    "rollup-plugin-typescript2": "^0.24.0",
+    "typescript": "^3.6.2"
   }
 }
